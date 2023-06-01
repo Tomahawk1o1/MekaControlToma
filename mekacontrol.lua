@@ -1,6 +1,7 @@
 local rla = peripheral.find("fissionReactorLogicAdapter")
 local boi = peripheral.find("boilerValve")
-local trb = peripheral.find("turbineValve")
+local trb = peripheral.wrap("turbineValve_0")
+local trb2 = peripheral.wrap("turbineValve_1")
 local ind = peripheral.find("inductionPort")
 local mon = peripheral.find("monitor")
 local scramCount = 0
@@ -42,6 +43,7 @@ local function info()
     local heated = math.ceil(rla.getHeatedCoolantFilledPercentage() * 100)
     local waste = math.ceil(rla.getWasteFilledPercentage() * 100)
     local steam = math.ceil(trb.getSteamFilledPercentage() * 100)
+    local steam2 = math.ceil(trb2.getSteamFilledPercentage() * 100)
     local bheated = math.ceil(boi.getHeatedCoolantFilledPercentage() * 100)
     local bcoolant = math.ceil(boi.getCooledCoolantFilledPercentage() * 100)
     local bwater = math.ceil(boi.getWaterFilledPercentage() * 100)
@@ -72,6 +74,25 @@ local function info()
     end
     if production > 1e12 then
         prodDisp = string.format("%.2f", production / 1e12) .. " TFE/t"
+    end
+    
+    local production2 = mekanismEnergyHelper.joulesToFE(trb2.getProductionRate())
+
+    local prodDisp2 = string.format("%.2f", production2)
+    if production2 < 1000 then
+        prodDisp2 = production2 .. " FE/t"
+    end
+    if production2 > 1000 then
+        prodDisp2 = string.format("%.2f", production2 / 1000) .. " kFE/t"
+    end
+    if production2 > 1e6 then
+        prodDisp2 = string.format("%.2f", production2 / 1e6) .. " MFE/t"
+    end
+    if production2 > 1e9 then
+        prodDisp2 = string.format("%.2f", production2 / 1e9) .. " GFE/t"
+    end
+    if production2 > 1e12 then
+        prodDisp2 = string.format("%.2f", production2 / 1e12) .. " TFE/t"
     end
 
     local input = mekanismEnergyHelper.joulesToFE(ind.getLastInput())
@@ -153,14 +174,18 @@ local function info()
     mon.setCursorPos(1,14) mon.setTextColor(16) mon.write("Industrial Turbine")
     mon.setCursorPos(1,15) mon.setTextColor(8192) mon.write("Production: ") mon.setTextColor(1) mon.write(prodDisp)
     mon.setCursorPos(1,16) mon.setTextColor(256) mon.write("Steam: ") mon.setTextColor(1) mon.write(steam .. "%")
+    
+    mon.setCursorPos(1,18) mon.setTextColor(16) mon.write("Industrial Turbine")
+    mon.setCursorPos(1,19) mon.setTextColor(8192) mon.write("Production: ") mon.setTextColor(1) mon.write(prodDisp)
+    mon.setCursorPos(1,20) mon.setTextColor(256) mon.write("Steam: ") mon.setTextColor(1) mon.write(steam .. "%")
 
-    mon.setCursorPos(1,18) mon.setTextColor(16) mon.write("Induction Matrix")
-    mon.setCursorPos(1,19) mon.setTextColor(8192) mon.write("Input: ") mon.setTextColor(1) mon.write(inputDisp)
-    mon.setCursorPos(1,20) mon.setTextColor(8192) mon.write("Output: ") mon.setTextColor(1) mon.write(outputDisp)
-    mon.setCursorPos(1,21) mon.setTextColor(8192) mon.write("Energy: ") mon.setTextColor(1) mon.write(energyDisp)
-    mon.setCursorPos(1,22) mon.setTextColor(8192) mon.write("Filled: ") mon.setTextColor(1) mon.write(epercent .. "%")
+    mon.setCursorPos(1,22) mon.setTextColor(16) mon.write("Induction Matrix")
+    mon.setCursorPos(1,23) mon.setTextColor(8192) mon.write("Input: ") mon.setTextColor(1) mon.write(inputDisp)
+    mon.setCursorPos(1,24) mon.setTextColor(8192) mon.write("Output: ") mon.setTextColor(1) mon.write(outputDisp)
+    mon.setCursorPos(1,25) mon.setTextColor(8192) mon.write("Energy: ") mon.setTextColor(1) mon.write(energyDisp)
+    mon.setCursorPos(1,26) mon.setTextColor(8192) mon.write("Filled: ") mon.setTextColor(1) mon.write(epercent .. "%")
 
-    mon.setCursorPos(1,24) mon.setTextColor(16384) mon.write("SCRAM COUNT: ") mon.write(string.format("%3.0f", scramCount))
+    mon.setCursorPos(1,28) mon.setTextColor(16384) mon.write("SCRAM COUNT: ") mon.write(string.format("%3.0f", scramCount))
 end
 
 while true do
