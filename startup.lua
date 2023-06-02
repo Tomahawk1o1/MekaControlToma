@@ -1,7 +1,7 @@
 local rla = peripheral.find("fissionReactorLogicAdapter")
 
-local programName = "mekacontrol.lua"
-local programCode = "Uwu72qwz"
+local programName = "TomaMekaReactor.lua"
+local programCode = "8vWVGYvn"
 local index = "mekastartup"
 
 if (fs.exists(programName) == false) then
