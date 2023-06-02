@@ -156,11 +156,14 @@ local function info()
     end
 
     local epercent = math.ceil(ind.getEnergyFilledPercentage() * 100)
+    
+    local burnRate = math.ceil(rla.getActualBurnRate())
+    local fuelAmt = (rla.getFuel())
 
     mon.clear()
     mon.setCursorPos(1,1) mon.setTextColor(16) mon.write("Fission Reactor")
     mon.setCursorPos(1,2) mon.setTextColor(512) mon.write("Status: ") mon.setTextColor(1) mon.write(status)
-    mon.setCursorPos(1,3) mon.setTextColor(32) mon.write("Fuel: ") mon.setTextColor(1) mon.write(fuel .. "%")
+    mon.setCursorPos(1,3) mon.setTextColor(32) mon.write("Fuel: ") mon.setTextColor(1) mon.write(fuelAmt" : "fuel .. "%")
     mon.setCursorPos(1,4) mon.setTextColor(2048) mon.write("Coolant: ") mon.setTextColor(1) mon.write(coolant .. "%")
     mon.setCursorPos(1,5) mon.setTextColor(4) mon.write("Heated: ") mon.setTextColor(1) mon.write(heated .. "%")
     mon.setCursorPos(1,6) mon.setTextColor(4096) mon.write("Waste: ") mon.setTextColor(1) mon.write(waste .. "%")
@@ -184,6 +187,8 @@ local function info()
     mon.setCursorPos(1,24) mon.setTextColor(8192) mon.write("Output: ") mon.setTextColor(1) mon.write(outputDisp)
     mon.setCursorPos(1,25) mon.setTextColor(8192) mon.write("Energy: ") mon.setTextColor(1) mon.write(energyDisp)
     mon.setCursorPos(1,26) mon.setTextColor(8192) mon.write("Filled: ") mon.setTextColor(1) mon.write(epercent .. "%")
+    
+    mon.SetCursorPos(1,28) mon.setTextColor(8192) mon.write("Burn Rate:" .. burnRate" mb/t ")
 
     mon.setCursorPos(1,28) mon.setTextColor(16384) mon.write("SCRAM COUNT: ") mon.write(string.format("%3.0f", scramCount))
 end
